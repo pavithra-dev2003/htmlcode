@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pavithra — Find Your Next Job</title>
+  <meta name="description" content="Pavithra is a modern job marketplace to discover top roles and hire great talent." />
+  <meta property="og:title" content="Pavithra — Find Your Next Job" />
+  <meta property="og:description" content="Discover top roles and hire great talent on Pavithra." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg: #0b1020;         /* deep indigo */
+      --card: #0f1530;
+      --muted: #a7b0c0;
+      --text: #e8ecf4;
+      --brand: #5dd3ff;      /* sky */
+      --brand-2: #7affb2;    /* mint */
+      --accent: #ffcf61;     /* sun */
+      --danger: #ff6b6b;
+      --ok: #3ddc97;
+      --border: #1f2745;
+      --shadow: rgba(0,0,0,.24);
+      --radius: 16px;
+      --radius-lg: 22px;
+      --radius-sm: 10px;
+      --maxw: 1200px;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 20% -10%, #12204a 0%, rgba(18,32,74,0) 60%),
+                  radial-gradient(800px 400px at 100% 0%, #0f2b3e 0%, rgba(15,43,62,0) 60%),
+                  var(--bg);
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    a { color: var(--brand); text-decoration: none }
+    a:hover { text-decoration: underline }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px }
+    .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: linear-gradient(180deg, #1a2040, #131a34); color: var(--text); font-weight: 600; cursor: pointer; box-shadow: 0 6px 18px var(--shadow); transition: transform .08s ease, border-color .2s ease }
+    .btn:hover { transform: translateY(-1px); border-color: #2b3768 }
+    .btn.primary { background: linear-gradient(180deg, #0e7cc9, #0a5ea1); border-color: #0f6fb8 }
+    .btn.ghost { background: transparent; border-color: #2b3768 }
+    .chip { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .7rem; border-radius: 999px; border: 1px solid var(--border); background: #121834; color: var(--muted); font-size: .9rem }
+    .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(10px); background: rgba(6,10,28,.6); border-bottom: 1px solid rgba(255,255,255,.06) }
+    .nav .inner { display: flex; align-items: center; justify-content: space-between; height: 68px }
+    .brand { display: inline-flex; align-items: center; gap: .6rem; font-weight: 800; letter-spacing: .3px; font-size: 1.1rem }
+    .logo { width: 28px; height: 28px; border-radius: 8px; background: conic-gradient(from 180deg at 50% 50%, var(--brand), var(--brand-2), var(--accent), var(--brand)); box-shadow: 0 0 0 2px #0b1020 inset, 0 6px 18px rgba(0,0,0,.28) }
+    .nav .links { display: none }
+    .nav-cta { display: flex; gap: .6rem }
+    @media (min-width: 900px) { .nav .links { display: flex; gap: 1.2rem; align-items: center } }
+
+    /* Hero */
+    .hero { padding: 64px 0 36px }
+    .hero .top { display: grid; gap: 22px; grid-template-columns: 1fr }
+    .title { font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1; font-weight: 900; letter-spacing: .2px; margin: 0 }
+    .subtitle { color: var(--muted); margin: 6px 0 0 }
+
+    .search { margin-top: 22px; background: linear-gradient(180deg, #11183a, #0c1230); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-lg); box-shadow: 0 12px 34px var(--shadow) }
+    .search form { display: grid; grid-template-columns: 1fr; gap: 10px }
+    .input { display: flex; align-items: center; gap: .6rem; background: #0c1230; border: 1px solid #1c244a; padding: .8rem .9rem; border-radius: 12px }
+    .input input, .input select { width: 100%; background: transparent; border: 0; outline: none; color: var(--text); font-size: 1rem }
+    .search .actions { display: flex; gap: 10px; flex-wrap: wrap }
+    .popular { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 12px }
+
+    @media (min-width: 900px) {
+      .hero .top { grid-template-columns: 1.2fr .8fr; align-items: center }
+      .search form { grid-template-columns: 1.4fr .9fr .7fr auto }
+      .search .actions { justify-content: flex-end }
+    }
+
+    /* Sections */
+    section { padding: 40px 0 }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 18px }
+    .section-head h2 { margin: 0; font-size: 1.4rem }
+    .grid { display: grid; gap: 14px }
+    .grid.cols-3 { grid-template-columns: repeat(1, 1fr) }
+    @media (min-width: 700px) { .grid.cols-3 { grid-template-columns: repeat(3, 1fr) } }
+    @media (min-width: 1100px) { .grid.cols-4 { grid-template-columns: repeat(4, 1fr) } }
+
+    .card { background: linear-gradient(180deg, #0e1436, #0b122e); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: 0 10px 30px var(--shadow) }
+    .card .muted { color: var(--muted); font-size: .95rem }
+
+    /* Category */
+    .cat { display: grid; gap: 10px; align-content: start }
+    .cat .ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: #101744; border: 1px solid #22306b }
+    .cat strong { font-size: 1rem }
+
+    /* Jobs */
+    .jobs { grid-template-columns: repeat(1, 1fr) }
+    @media (min-width: 900px) { .jobs { grid-template-columns: repeat(2, 1fr) } }
+    .job { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center }
+    .job .logo { width: 42px; height: 42px; border-radius: 10px }
+    .job .meta { color: var(--muted); font-size: .92rem }
+    .tag { display: inline-block; padding: .25rem .55rem; border: 1px solid #283463; border-radius: 999px; font-size: .82rem; color: var(--muted) }
+
+    /* How it works */
+    .steps { display: grid; gap: 14px; grid-template-columns: repeat(1, 1fr) }
+    @media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr) } }
+    .step .num { width: 36px; height: 36px; border-radius: 10px; background: #14215a; border: 1px solid #2b3768; display: grid; place-items: center; font-weight: 800 }
+
+    /* Logos */
+    .logos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px }
+    @media (min-width: 700px) { .logos { grid-template-columns: repeat(6, 1fr) } }
+    .logo-tile { background: #0f1433; border: 1px solid #1c244a; border-radius: 12px; height: 64px; display: grid; place-items: center }
+
+    /* CTA band */
+    .cta { background: linear-gradient(90deg, rgba(93,211,255,.14), rgba(122,255,178,.12)); border: 1px solid #24476a; border-radius: var(--radius-lg); padding: 20px; display: grid; gap: 10px; align-items: center; box-shadow: 0 10px 30px var(--shadow) }
+    @media (min-width: 900px) { .cta { grid-template-columns: 1fr auto } }
+
+    /* Footer */
+    footer { border-top: 1px solid rgba(255,255,255,.08); margin-top: 30px; padding: 26px 0; color: var(--muted) }
+    .fgrid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr) }
+    @media (min-width: 900px) { .fgrid { grid-template-columns: 2fr repeat(3, 1fr) } }
+    .fgrid a { color: var(--muted) }
+    .copyright { margin-top: 12px; font-size: .9rem; text-align: center }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display: none; place-items: center; background: rgba(7,8,16,.6); z-index: 100 }
+    .modal[open] { display: grid }
+    .dialog { width: min(520px, 94vw); background: #0c1230; border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 20px 70px var(--shadow); padding: 18px }
+    .dialog h3 { margin: 6px 0 14px }
+    .dialog form { display: grid; gap: 10px }
+    .dialog label { font-size: .95rem }
+    .dialog input[type="email"], .dialog input[type="password"] { width: 100%; padding: .75rem .9rem; border-radius: 12px; background: #0a1028; border: 1px solid #1c244a; color: var(--text) }
+
+    /* Utilities */
+    .row { display: flex; gap: 8px; align-items: center }
+    .between { justify-content: space-between }
+    .muted { color: var(--muted) }
+    .hidden { display: none !important }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="nav">
+    <div class="wrap inner">
+      <a class="brand" href="#" aria-label="Pavithra Home">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Pavithra</span>
+      </a>
+      <div class="links">
+        <a href="#jobs">Jobs</a>
+        <a href="#categories">Categories</a>
+        <a href="#how">How it works</a>
+        <a href="#employers">For Employers</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn ghost" data-open="loginModal" aria-label="Open login">Login</button>
+        <button class="btn primary" data-open="signupModal" aria-label="Open sign up">Register</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="wrap top">
+      <div>
+        <h1 class="title">Find your next role with <span style="background: linear-gradient(90deg, var(--brand), var(--brand-2)); -webkit-background-clip:text; background-clip:text; color: transparent;">Pavithra</span></h1>
+        <p class="subtitle">Search lakhs of verified jobs across India. Get matched instantly—no spam, just real opportunities.</p>
+
+        <div class="search" role="search" aria-label="Job search">
+          <form id="searchForm">
+            <div class="input" aria-label="Job title or keywords">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/></svg>
+              <input id="q" name="q" type="text" placeholder="Role, skills (e.g., Java, DevOps)" autocomplete="off" />
+            </div>
+            <div class="input" aria-label="Location">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-5.4 7-12a7 7 0 10-14 0c0 6.6 7 12 7 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>
+              <input id="loc" name="loc" type="text" placeholder="City (e.g., Bengaluru)" />
+            </div>
+            <div class="input" aria-label="Experience">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V6a5 5 0 0110 0v4M5 10h14v10H5V10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <select id="exp" name="exp">
+                <option value="">Experience</option>
+                <option value="0-1">0–1 years</option>
+                <option value="1-3">1–3 years</option>
+                <option value="3-5">3–5 years</option>
+                <option value="5-8">5–8 years</option>
+                <option value="8+">8+ years</option>
+              </select>
+            </div>
+            <div class="actions">
+              <button class="btn primary" type="submit">Search Jobs</button>
+              <button class="btn" type="button" id="postJobBtn">Post a Job</button>
+            </div>
+          </form>
+          <div class="popular" aria-label="Popular searches">
+            <span class="chip"># DevOps</span>
+            <span class="chip"># Full‑Stack</span>
+            <span class="chip"># Data Engineer</span>
+            <span class="chip"># Cloud AWS</span>
+            <span class="chip"># Java</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="min-height: 240px">
+          <div class="row between">
+            <strong>Instant Match</strong>
+            <span class="tag">New</span>
+          </div>
+          <p class="muted">Create your free profile and let companies come to you. Smart filters, real‑time notifications, and privacy controls.</p>
+          <ul class="muted" style="margin:0 0 8px 18px">
+            <li>Verified companies only</li>
+            <li>Salary insights & skills match</li>
+            <li>One‑click apply</li>
+          </ul>
+          <button class="btn" data-open="signupModal">Create Free Account</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Categories -->
+  <section id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Trending Categories</h2>
+        <a href="#">View all</a>
+      </div>
+      <div class="grid cols-3">
+        <article class="card cat">
+          <div class="ico">💻</div>
+          <strong>Software Development</strong>
+          <span class="muted">25,000+ jobs</span>
+        </article>
+        <article class="card cat">
+          <div class="ico">☁️</div>
+          <strong>Cloud & DevOps</strong>
+          <span class="muted">12,800+ jobs</span>
+        </article>
+        <article class="card cat">
+          <div class="ico">📊</div>
+          <strong>Data & Analytics</strong>
+          <span class="muted">9,600+ jobs</span>
+        </article>
+        <article class="card cat">
+          <div class="ico">🎨</div>
+          <strong>Design & UX</strong>
+          <span class="muted">3,400+ jobs</span>
+        </article>
+        <article class="card cat">
+          <div class="ico">🛒</div>
+          <strong>Sales & Marketing</strong>
+          <span class="muted">7,200+ jobs</span>
+        </article>
+        <article class="card cat">
+          <div class="ico">📞</div>
+          <strong>Customer Support</strong>
+          <span class="muted">5,100+ jobs</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Jobs -->
+  <section id="jobs">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Featured Jobs</h2>
+        <a href="#">See more</a>
+      </div>
+      <div class="grid jobs">
+        <!-- Job card -->
+        <article class="card job">
+          <img class="logo" alt="Company logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='100%25' height='100%25' rx='10' ry='10' fill='%235dd3ff'/%3E%3C/svg%3E">
+          <div>
+            <strong>DevOps Engineer</strong>
+            <div class="meta">Acme Cloud • Bengaluru • ₹10–16 LPA</div>
+            <div class="row" style="gap:6px; margin-top:6px">
+              <span class="tag">AWS</span>
+              <span class="tag">Kubernetes</span>
+              <span class="tag">Terraform</span>
+            </div>
+          </div>
+          <div><button class="btn">Apply</button></div>
+        </article>
+
+        <article class="card job">
+          <img class="logo" alt="Company logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='100%25' height='100%25' rx='10' ry='10' fill='%237affb2'/%3E%3C/svg%3E">
+          <div>
+            <strong>Full‑Stack Developer</strong>
+            <div class="meta">ByteWorks • Remote • ₹8–14 LPA</div>
+            <div class="row" style="gap:6px; margin-top:6px">
+              <span class="tag">React</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">MongoDB</span>
+            </div>
+          </div>
+          <div><button class="btn">Apply</button></div>
+        </article>
+
+        <article class="card job">
+          <img class="logo" alt="Company logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='100%25' height='100%25' rx='10' ry='10' fill='%23ffcf61'/%3E%3C/svg%3E">
+          <div>
+            <strong>Data Engineer</strong>
+            <div class="meta">QuantX • Hyderabad • ₹12–20 LPA</div>
+            <div class="row" style="gap:6px; margin-top:6px">
+              <span class="tag">Python</span>
+              <span class="tag">Spark</span>
+              <span class="tag">Airflow</span>
+            </div>
+          </div>
+          <div><button class="btn">Apply</button></div>
+        </article>
+
+        <article class="card job">
+          <img class="logo" alt="Company logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42'%3E%3Crect width='100%25' height='100%25' rx='10' ry='10' fill='%23ff6b6b'/%3E%3C/svg%3E">
+          <div>
+            <strong>QA Automation Engineer</strong>
+            <div class="meta">ZenSoft • Pune • ₹7–12 LPA</div>
+            <div class="row" style="gap:6px; margin-top:6px">
+              <span class="tag">Selenium</span>
+              <span class="tag">API Testing</span>
+              <span class="tag">CI/CD</span>
+            </div>
+          </div>
+          <div><button class="btn">Apply</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How Pavithra Works</h2>
+      </div>
+      <div class="steps">
+        <article class="card step">
+          <div class="num">1</div>
+          <h3 style="margin:.4rem 0">Create profile</h3>
+          <p class="muted">Add your skills, experience, and preferences. Set visibility the way you want.</p>
+        </article>
+        <article class="card step">
+          <div class="num">2</div>
+          <h3 style="margin:.4rem 0">Get matched</h3>
+          <p class="muted">Our smart matcher highlights the best roles based on skills and salary fit.</p>
+        </article>
+        <article class="card step">
+          <div class="num">3</div>
+          <h3 style="margin:.4rem 0">Apply & track</h3>
+          <p class="muted">One‑click apply and live status tracking. No more guessing.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Employer CTA -->
+  <section id="employers">
+    <div class="wrap">
+      <div class="cta">
+        <div>
+          <h3 style="margin:0">Hire faster with Pavithra</h3>
+          <p class="muted" style="margin:.2rem 0 0">Post jobs, manage applications, and message candidates—free to start.</p>
+        </div>
+        <div>
+          <button class="btn primary" id="openEmployerModal">Post a Job</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logos -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Trusted by growing teams</h2>
+      </div>
+      <div class="logos">
+        <div class="logo-tile">A</div>
+        <div class="logo-tile">B</div>
+        <div class="logo-tile">C</div>
+        <div class="logo-tile">D</div>
+        <div class="logo-tile">E</div>
+        <div class="logo-tile">F</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section>
+    <div class="wrap">
+      <div class="card">
+        <div class="row between">
+          <div>
+            <strong style="font-size:1.1rem">Get weekly job alerts</strong>
+            <p class="muted" style="margin:.2rem 0 0">Hand‑picked roles straight to your inbox.</p>
+          </div>
+          <form class="row" id="newsletterForm">
+            <input type="email" id="newsletterEmail" placeholder="you@example.com" required style="padding:.7rem .9rem; border-radius:12px; background:#0a1028; border:1px solid #1c244a; color:var(--text)" />
+            <button class="btn" type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap fgrid">
+      <div>
+        <div class="brand"><span class="logo"></span><span>Pavithra</span></div>
+        <p class="muted">A professional job marketplace built for speed, trust, and outcomes.</p>
+      </div>
+      <div>
+        <strong>For Job Seekers</strong>
+        <div><a href="#">Browse Jobs</a></div>
+        <div><a href="#">Upload Resume</a></div>
+        <div><a href="#">Job Alerts</a></div>
+      </div>
+      <div>
+        <strong>For Employers</strong>
+        <div><a href="#">Post a Job</a></div>
+        <div><a href="#">Talent Search</a></div>
+        <div><a href="#">Pricing</a></div>
+      </div>
+      <div>
+        <strong>Company</strong>
+        <div><a href="#">About</a></div>
+        <div><a href="#">Contact</a></div>
+        <div><a href="#">Privacy</a></div>
+      </div>
+    </div>
+    <div class="wrap copyright">© <span id="year"></span> Pavithra. All rights reserved.</div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="dialog">
+      <div class="row between">
+        <h3 id="loginTitle">Login</h3>
+        <button class="btn ghost" data-close="loginModal" aria-label="Close login">Close</button>
+      </div>
+      <form id="loginForm">
+        <label>Email</label>
+        <input type="email" id="loginEmail" required />
+        <label>Password</label>
+        <input type="password" id="loginPass" required />
+        <button class="btn primary" type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div class="modal" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+    <div class="dialog">
+      <div class="row between">
+        <h3 id="signupTitle">Create your free account</h3>
+        <button class="btn ghost" data-close="signupModal" aria-label="Close signup">Close</button>
+      </div>
+      <form id="signupForm">
+        <label>Full Name</label>
+        <input type="text" id="signupName" required />
+        <label>Email</label>
+        <input type="email" id="signupEmail" required />
+        <label>Password</label>
+        <input type="password" id="signupPass" minlength="6" required />
+        <button class="btn primary" type="submit">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Employer Post Job Modal -->
+  <div class="modal" id="employerModal" role="dialog" aria-modal="true" aria-labelledby="employerTitle">
+    <div class="dialog">
+      <div class="row between">
+        <h3 id="employerTitle">Post a Job</h3>
+        <button class="btn ghost" data-close="employerModal" aria-label="Close employer form">Close</button>
+      </div>
+      <form id="postJobForm">
+        <label>Job Title</label>
+        <input type="text" id="jobTitle" required />
+        <label>Company</label>
+        <input type="text" id="jobCompany" required />
+        <label>Location</label>
+        <input type="text" id="jobLocation" placeholder="e.g., Bengaluru" required />
+        <label>Salary (₹)</label>
+        <input type="text" id="jobSalary" placeholder="e.g., 10–16 LPA" />
+        <button class="btn primary" type="submit">Submit Job</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Modal open/close
+    const openers = document.querySelectorAll('[data-open]');
+    const closers = document.querySelectorAll('[data-close]');
+    openers.forEach(btn => btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-open');
+      document.getElementById(id).setAttribute('open', '');
+    }));
+    closers.forEach(btn => btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-close');
+      document.getElementById(id).removeAttribute('open');
+    }));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal[open]').forEach(m => m.removeAttribute('open'));
+    });
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) e.target.removeAttribute('open');
+    });
+
+    // Short demo handlers (replace with real backend later)
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = document.getElementById('q').value.trim();
+      const loc = document.getElementById('loc').value.trim();
+      const exp = document.getElementById('exp').value;
+      alert(`Searching jobs for: ${q || 'Any role'}\nLocation: ${loc || 'Anywhere'}\nExperience: ${exp || 'Any'}`);
+    });
+
+    document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('newsletterEmail').value;
+      alert(`Subscribed: ${email}`);
+      e.target.reset();
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Logged in (demo)');
+      document.getElementById('loginModal').removeAttribute('open');
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Account created (demo)');
+      document.getElementById('signupModal').removeAttribute('open');
+    });
+
+    document.getElementById('postJobBtn').addEventListener('click', () => {
+      document.getElementById('employerModal').setAttribute('open', '');
+    });
+    document.getElementById('openEmployerModal')?.addEventListener('click', () => {
+      document.getElementById('employerModal').setAttribute('open', '');
+    });
+    document.getElementById('postJobForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const t = document.getElementById('jobTitle').value;
+      const c = document.getElementById('jobCompany').value;
+      const l = document.getElementById('jobLocation').value;
+      const s = document.getElementById('jobSalary').value;
+      alert(`Job submitted (demo):\n${t} @ ${c}\n${l} • ${s}`);
+      document.getElementById('employerModal').removeAttribute('open');
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
